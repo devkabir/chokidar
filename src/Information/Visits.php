@@ -45,9 +45,9 @@ final class Visits {
 	 * @param string $referer  The URL of the page that linked to the current page.
 	 */
 	public static function set( string $ip, string $method, string $page_url, string $referer ): void {
-		$pages                                                                = self::all();
+		$pages = self::all();
 		$pages[ $page_url ][ $method ][ $referer ][ current_time( 'mysql' ) ] = $ip;
-		set_transient( self::KEY, $pages, Plugin::TRANSIENT_TIME );
+		set_transient( self::KEY, $pages, Plugin::TRANSIENT_WEEK );
 	}
 
 	/**
@@ -61,15 +61,34 @@ final class Visits {
 		foreach ( $collections as $page => $methods ) {
 			$holder = array( 'page' => $page );
 			foreach ( $methods as $method => $referrers ) {
-				$holder['method'] = $method === 'GET' ? __('Visiting', 'chokidar') : __('Submitting', 'chokidar');
+				switch ( $method ) {
+					case 'GET':
+						$method = 'Visit';
+						break;
+					case 'POST':
+						$method = 'Submit';
+						break;
+					case 'PUT':
+						$method = 'Replace';
+						break;
+					case 'PATCH':
+						$method = 'Modify';
+						break;
+					case 'DELETE':
+						$method = 'Delete';
+						break;
+					default:
+						$method = 'Unknown';
+						break;
+				}
+				$holder['method'] = $method;
 				foreach ( $referrers as $referer => $hits ) {
-					$holder['referer'] = $referer;
+					$holder['referer'] = wp_parse_url( $referer, PHP_URL_HOST );
 					$holder['hits']    = count( $hits );
 					$data[]            = $holder;
 				}
 			}
 		}
-
 		return self::sort_by( $data, 'hits' );
 	}
 

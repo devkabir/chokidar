@@ -6,7 +6,7 @@
     'aliases' => 
     array (
     ),
-    'reference' => '5822ff4ecd68eb6fe8d1d2a1b00414c4788b90b1',
+    'reference' => 'd476ef148041981f8ad2df589833e2edba5f016a',
     'name' => 'devkabir/choukidar',
   ),
   'versions' => 
@@ -18,7 +18,7 @@
       'aliases' => 
       array (
       ),
-      'reference' => '5822ff4ecd68eb6fe8d1d2a1b00414c4788b90b1',
+      'reference' => 'd476ef148041981f8ad2df589833e2edba5f016a',
     ),
     'matomo/device-detector' => 
     array (

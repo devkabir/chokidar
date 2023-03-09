@@ -59,6 +59,9 @@ trait Transient {
 		return date_i18n( 'd-m-Y g:i A', strtotime( $date ) );
 	}
 
+	public static function format_underscore( string $text ): string {
+		return ucwords( str_replace( '_', ' ', $text ) );
+	}
 
 	/**
 	 * It sorts an array of arrays by a key
@@ -69,9 +72,16 @@ trait Transient {
 	 * @return array The array is being sorted by the key.
 	 */
 	public static function sort_by( array $data, string $key ): array {
-		usort( $data, static function ( $a, $b ) use ( $key ) {
-			return $b[ $key ] - $a[ $key ];
-		} );
+		usort(
+			$data,
+			static function ( $a, $b ) use ( $key ) {
+				if ( is_string( $b[ $key ] ) && is_string( $a[ $key ] ) ) {
+					return strcmp( $a[ $key ], $b[ $key ] );
+				}
+
+				return $b[ $key ] - $a[ $key ];
+			}
+		);
 
 		return $data;
 	}

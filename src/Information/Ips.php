@@ -55,7 +55,7 @@ final class Ips {
 		}
 		$data['time'] = current_time( 'mysql' );
 		$ips[ $ip ]   = $data;
-		set_transient( self::KEY, $ips, Plugin::TRANSIENT_TIME );
+		set_transient( self::KEY, $ips, Plugin::TRANSIENT_WEEK );
 	}
 
 	/**
@@ -79,7 +79,7 @@ final class Ips {
 			$data[]                = $holder;
 		}
 
-		return array_reverse($data);
+		return array_reverse( $data );
 	}
 
 }

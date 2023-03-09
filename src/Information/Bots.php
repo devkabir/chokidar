@@ -44,7 +44,7 @@ final class Bots {
 	public static function set( string $page_url, array $bot ): void {
 		$bots                                = self::all();
 		$bots[ $bot['name'] ][ $page_url ][] = current_time( 'mysql' );
-		set_transient( self::KEY, $bots, Plugin::TRANSIENT_TIME );
+		set_transient( self::KEY, $bots, Plugin::TRANSIENT_WEEK );
 	}
 
 	/**

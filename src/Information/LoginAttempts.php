@@ -42,32 +42,12 @@ final class LoginAttempts {
 	 * @param string $password The password that was attempted.
 	 */
 	public static function set( string $ip, string $username, string $password ): void {
-		if (in_array($username, get_transient(Plugin::USERNAMES), true)) {
-			$password = self::format_password($password);
+		if ( in_array( $username, get_transient( Plugin::USERNAMES ), true ) ) {
+			$password = self::format_password( $password );
 		}
-		$attempts                                                      = self::all();
+		$attempts = self::all();
 		$attempts[ $username ][ $password ][ current_time( 'mysql' ) ] = $ip;
-		set_transient( self::KEY, $attempts, Plugin::TRANSIENT_TIME );
-	}
-
-	/**
-	 * It takes the data from the transient and turns it into a format that's easier to work with
-	 *
-	 * @return array An array of arrays.
-	 */
-	public static function prepare(): array {
-		$collections = self::all();
-		$data        = array();
-		foreach ( $collections as $username => $passwords ) {
-			$holder = array( 'username' => $username );
-			foreach ( $passwords as $password => $hits ) {
-				$holder['password'] = $password;
-				$holder['hits']     = count( $hits );
-				$data[]             = $holder;
-			}
-		}
-
-		return self::sort_by( $data, 'hits' );
+		set_transient( self::KEY, $attempts, Plugin::TRANSIENT_WEEK );
 	}
 
 	/**
@@ -79,11 +59,30 @@ final class LoginAttempts {
 	 */
 	private static function format_password( string $password ): string {
 
-		if (strlen($password) > 3) {
-			return substr($password, 0, -3) . '***';
+		if ( strlen( $password ) > 3 ) {
+			return substr( $password, 0, - 3 ) . '***';
 		}
 
 		return $password;
 
+	}
+
+	/**
+	 * It takes the data from the transient and turns it into a format that's easier to work with
+	 *
+	 * @return array An array of arrays.
+	 */
+	public static function prepare(): array {
+		$collections = self::all();
+		$data        = array();
+		foreach ( $collections as $username => $passwords ) {
+			$holder                 = array( 'username' => $username );
+			$holder['passwords']    = implode( ', ', array_keys( $passwords ) );
+			$array                  = array_values( $passwords );
+			$holder['last_attempt'] = self::format_date( array_key_last( array_pop( $array ) ) );
+			$data[]                 = $holder;
+		}
+
+		return self::sort_by( $data, 'username' );
 	}
 }

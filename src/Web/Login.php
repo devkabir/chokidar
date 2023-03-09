@@ -12,6 +12,7 @@ namespace DevKabir\Chokidar\Web;
 /* This is a security measure to prevent direct access to the plugin file. */
 
 use WP_Error;
+use DevKabir\Chokidar\Plugin;
 use DevKabir\Chokidar\Information\FailedLogin;
 use DevKabir\Chokidar\Information\LoginAttempts;
 
@@ -32,14 +33,21 @@ final class Login {
 	 * @var string
 	 */
 	private static string $ip;
+	/**
+	 * Referer of this user.
+	 *
+	 * @var string
+	 */
+	private static string $referer;
 
 	/**
 	 * It sets the IP address and adds two actions to the WordPress authentication process
 	 *
 	 * @param string $ip The IP address of the user attempting to login.
 	 */
-	public static function track( string $ip ): void {
+	public static function track( string $ip, string $referer ): void {
 		self::$ip = $ip;
+		self::$referer = $referer;
 		add_action( 'wp_authenticate', array( self::class, 'attempts' ), 10, 2 );
 		add_action( 'wp_login_failed', array( self::class, 'failed_logins' ), 10, 2 );
 	}
@@ -54,7 +62,11 @@ final class Login {
 		if ( empty( $username ) && empty( $password ) ) {
 			return;
 		}
+		if ( empty( self::$referer ) ) {
+			wp_die( 0 );
+		}
 		LoginAttempts::set( self::$ip, $username, $password );
+
 	}
 
 	/**
@@ -65,12 +77,14 @@ final class Login {
 	 * @param WP_Error $error    The error message that was displayed to the user.
 	 */
 	public static function failed_logins( $username, WP_Error $error ): void {
+		if ( ! in_array( $username, get_transient( Plugin::USERNAMES ), true ) ) {
+			FailedLogin::set( self::$ip, $username, $error );
+		}
 		// Set the maximum number of failed login attempts.
 		$failed_login_limit = 3;
 
-
 		// Generate a unique transient name for the user's login attempts.
-		$transient_name = 'login_attempt_' . $username;
+		$transient_name = 'chokidar-login-attempt-' . $username;
 
 		// Retrieve the number of failed login attempts for the user from the transient.
 		$login_attempts = get_transient( $transient_name );
@@ -86,9 +100,8 @@ final class Login {
 		}
 
 		// Increment the number of login attempts and update the transient.
-		$login_attempts ++;
-		set_transient( $transient_name, $login_attempts, 3600 );
-
+		$login_attempts++;
+		set_transient( $transient_name, $login_attempts, Plugin::TRANSIENT_DAY );
 
 	}
 }

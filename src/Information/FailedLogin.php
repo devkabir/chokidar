@@ -35,9 +35,9 @@ final class FailedLogin {
 	 * @param WP_Error $error    The error object that was returned by the login function.
 	 */
 	public static function set( string $ip, string $username, WP_Error $error ): void {
-		$fails                                                = self::all();
+		$fails = self::all();
 		$fails[ $username ][ $ip ][ current_time( 'mysql' ) ] = $error->get_error_code();
-		set_transient( self::KEY, $fails, Plugin::TRANSIENT_TIME );
+		set_transient( self::KEY, $fails, Plugin::TRANSIENT_WEEK );
 		Hackers::set( $ip, $error->get_error_code() );
 	}
 

@@ -9,15 +9,15 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2023-03-05T11:16:57+00:00\n"
+"POT-Creation-Date: 2023-03-09T09:03:39+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.6.0\n"
 "X-Domain: chokidar\n"
 
 #. Plugin Name of the plugin
-#: src/Admin/Menu.php:42
-#: src/Admin/Menu.php:43
-#: src/Admin/Menu.php:70
+#: src/Admin/Menu.php:44
+#: src/Admin/Menu.php:45
+#: src/Admin/Menu.php:73
 msgid "Chokidar"
 msgstr ""
 
@@ -26,7 +26,7 @@ msgid "https://devkabir.shop/plugin/chokidar"
 msgstr ""
 
 #. Description of the plugin
-#: src/Admin/Menu.php:72
+#: src/Admin/Menu.php:75
 msgid "Boost Your Website Performance and Security with Top 10 Visitor Insights!"
 msgstr ""
 
@@ -38,54 +38,46 @@ msgstr ""
 msgid "https://devkabir.shop/"
 msgstr ""
 
-#: src/Admin/Menu.php:103
+#: src/Admin/Menu.php:112
 msgid "IPs"
 msgstr ""
 
-#: src/Admin/Menu.php:104
+#: src/Admin/Menu.php:113
 msgid "Users at risk"
 msgstr ""
 
-#: src/Admin/Menu.php:105
+#: src/Admin/Menu.php:114
 msgid "Devices"
 msgstr ""
 
-#: src/Admin/Menu.php:106
+#: src/Admin/Menu.php:115
 msgid "Bots"
 msgstr ""
 
-#: src/Admin/Menu.php:107
+#: src/Admin/Menu.php:116
 msgid "Attempts"
 msgstr ""
 
-#: src/Admin/Menu.php:108
+#: src/Admin/Menu.php:117
 msgid "Failed Attempts"
 msgstr ""
 
-#: src/Admin/Menu.php:109
+#: src/Admin/Menu.php:118
 msgid "Visits"
 msgstr ""
 
-#: src/Admin/Menu.php:110
+#: src/Admin/Menu.php:119
 msgid "Hackers"
 msgstr ""
 
-#: src/Admin/Menu.php:121
+#: src/Admin/Menu.php:138
 msgid "Latest 10 "
 msgstr ""
 
-#: src/Admin/Menu.php:121
+#: src/Admin/Menu.php:138
 msgid "Top 10 "
 msgstr ""
 
-#: src/Admin/Menu.php:189
+#: src/Admin/Menu.php:205
 msgid "We couldn't find any records!"
-msgstr ""
-
-#: src/Information/Visits.php:64
-msgid "Visiting"
-msgstr ""
-
-#: src/Information/Visits.php:64
-msgid "Submitting"
 msgstr ""

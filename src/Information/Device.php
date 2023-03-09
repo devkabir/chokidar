@@ -49,7 +49,7 @@ final class Device {
 	public static function set( string $ip, DeviceDetector $device ): void {
 		$devices                                                                                                                                           = self::all();
 		$devices[ $device->getDeviceName() ][ $device->getModel() ][ $device->getOs( 'name' ) ][ $device->getClient( 'name' ) ][ current_time( 'mysql' ) ] = $ip;
-		set_transient( self::KEY, $devices, Plugin::TRANSIENT_TIME );
+		set_transient( self::KEY, $devices, Plugin::TRANSIENT_WEEK );
 	}
 
 	/**

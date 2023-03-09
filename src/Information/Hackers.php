@@ -46,9 +46,12 @@ final class Hackers {
 		$collections = self::all();
 		$data        = array();
 		foreach ( $collections as $ip => $reason ) {
-			$data[] = array( 'ip' => $ip, 'reason' => $reason );
+			$data[] = array(
+				'ip'  => $ip,
+				'why' => $reason,
+			);
 		}
 
-		return array_reverse($data);
+		return array_reverse( $data );
 	}
 }

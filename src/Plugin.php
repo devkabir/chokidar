@@ -33,12 +33,14 @@ use DevKabir\Chokidar\Information\LoginAttempts;
  * @package DevKabir\Chokidar
  */
 final class Plugin {
-
-	public const ADMIN_IP       = 'chokidar_admin_ip';
+	public const NAME           = 'chokidar';
+	public const VERSION        = '1.0.0';
+	public const ADMIN_IP       = 'chokidar-admin-ip';
 	public const USERNAMES      = 'chokidar-usernames';
 	public const USER_AT_RISK   = 'chokidar-users-at-risk';
 	public const HACKER         = 'chokidar-hackers';
-	public const TRANSIENT_TIME = 604800;
+	public const TRANSIENT_WEEK = 604800;
+	public const TRANSIENT_DAY  = 86400;
 
 	/**
 	 * It will load all codes need for chokidar run properly.
@@ -47,9 +49,6 @@ final class Plugin {
 	 * @return void
 	 */
 	public static function activate(): void {
-		add_action('init', function (){
-			load_plugin_textdomain( 'chokidar', false, plugin_dir_path(__DIR__) . '/languages' );
-		});
 		set_transient( self::ADMIN_IP, sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ?? '-' ) ) );
 	}
 
@@ -60,16 +59,6 @@ final class Plugin {
 	 * @return void
 	 */
 	public static function deactivate(): void {
-
-	}
-
-	/**
-	 * It will load all codes need for chokidar run properly.
-	 * - store admin ip to give a pass on every visit.
-	 *
-	 * @return void
-	 */
-	public static function uninstall(): void {
 		// Removing all cache.
 		delete_transient( self::ADMIN_IP );
 		Bots::destroy();
@@ -90,9 +79,12 @@ final class Plugin {
 		if ( is_admin() ) {
 			// 1. Initiate admin menu and pages.
 			Menu::init();
-			add_action( 'admin_enqueue_scripts', function () {
-				wp_enqueue_style( 'chokidar', plugins_url( 'assets/admin.css', __DIR__ ) );
-			} );
+			add_action(
+				'admin_enqueue_scripts',
+				function () {
+					wp_enqueue_style( self::NAME, plugins_url( 'assets/admin.css', __DIR__ ), array(), self::VERSION );
+				}
+			);
 			// 2.Initiate Dashboard Widgets.
 		} else {
 			// 1. collect information
@@ -108,14 +100,14 @@ final class Plugin {
 				wp_die( 0 );
 			}
 			// 3. Exclude admin from watching.
-			if ( get_transient( self::ADMIN_IP ) === $ip ) {
-				return;
-			}
+			// if ( get_transient( self::ADMIN_IP ) === $ip ) {
+			// return;
+			// }
 			// 4. Exclude allowed lists
 			if ( self::ignore_page( $page ) ) {
 				return;
 			}
-			// 5. Exclude wordpress bots.
+			// 5. Exclude WordPress bots.
 			if ( $device->isBot() && 'WordPress' === $device->getBot()['name'] ) {
 				return;
 			}
@@ -128,7 +120,7 @@ final class Plugin {
 				// 8. Track devices info.
 				Device::set( $ip, $device );
 				// 9. Track login page.
-				Login::track( $ip );
+				Login::track( $ip, $referer );
 			}
 		}
 

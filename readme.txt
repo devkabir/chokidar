@@ -78,7 +78,7 @@ Chokidar, provides a comprehensive set of features to help website owners monito
 *  Block malicious bots from accessing your website and improve your website's security
 
 
-### More features will be available on extend version based on user feedback ###
+### More features will be available on extended version based on user feedback ###
 
 ## Credits ##
 
